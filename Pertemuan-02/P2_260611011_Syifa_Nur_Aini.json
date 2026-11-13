@@ -1,0 +1,149 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "P1-test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "3821c213-90e7-463d-bc77-5e759257d0e5",
+      "name": "Webhook1",
+      "webhookId": "9b98cd87-327e-48ea-8d4a-07b02b80c184"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1008,
+        0
+      ],
+      "id": "64ecdfc0-785e-4ffb-bdec-fe848881a013",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fc00e7fa-ab11-41cb-a550-ce1b35708b22",
+              "name": "status",
+              "value": "succesess",
+              "type": "string"
+            },
+            {
+              "id": "94e6c894-5d04-401f-9168-05e75faf59bf",
+              "name": "prompt",
+              "value": "=Buatkan sapaan ramah dan kalimat penyemangat 2 kalimat untuk {{ $json.body.Nama }} yang memiliki hobi {{ $json.body.Hobi }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "d11f2244-69f7-45de-8f15-23e2b7f76fd3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview",
+          "cachedResultName": "Gemini 3 Flash Preview",
+          "cachedResultUrl": ""
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "ee1836e9-cb1a-40f4-b7e4-f18115870084",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "JjLELbE3DDxb0fFq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "884a4f7e-f9be-449f-ba89-4d3feddc57db",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e487122163bacaf09ef45439b33d30d9de6c41b2c99281893ff4922f3746feb8"
+  },
+  "nodeGroups": [],
+  "id": "fz2I7u4MI1HTFata",
+  "tags": []
+}
